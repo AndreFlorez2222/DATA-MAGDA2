@@ -26,9 +26,18 @@ resultado['AÑO'] = resultado['FECHA_REGISTRO'].dt.year
 resultado['MES'] = resultado['FECHA_REGISTRO'].dt.month
 resultado['NUMERO_SEMANA'] = resultado['FECHA_REGISTRO'].dt.isocalendar().week
 
+# Convertir las columnas FECHA_REGISTRO y FECHA_CAMBIO_ESTADO a tipo datetime
+resultado['FECHA_REGISTRO'] = pd.to_datetime(resultado['FECHA_REGISTRO'])
+resultado['FECHA_CAMBIO_ESTADO'] = pd.to_datetime(resultado['FECHA_CAMBIO_ESTADO'])
+
+# Calcular la diferencia entre las fechas
+resultado['SLA'] = resultado['FECHA_CAMBIO_ESTADO'] - resultado['FECHA_REGISTRO']
+resultado.loc[resultado['FECHA_CAMBIO_ESTADO'].isnull(), 'SLA'] = "Pendiente"
+
+
 
 
 # Guardar el resultado en un nuevo archivo Excel
-resultado.to_excel('resultado_con_du_ids_proveedor_y_fecha.xlsx', index=False)
+resultado.to_excel('resultado_con_du_ids_proveedor_y_fecha8.xlsx', index=False)
 
 print("Se han concatenado las columnas deseadas y se ha agregado la columna PROVEEDOR, AÑO, MES y NUMERO_SEMANA en un nuevo archivo Excel.")
